@@ -28,4 +28,3 @@ jobs:
     - run: |
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
-    - run: npm run build --if-present
