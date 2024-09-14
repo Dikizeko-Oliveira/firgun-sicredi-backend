@@ -58,7 +58,7 @@ export function extractData({
     .map((item) => ({
       CPF: item.cpf,
       NOTA: item.average,
-      DATA: format(item.created_at, "dd/MM/yyyy"),
+      DATA: format(item.created_at, "dd/MM/yyyy - HH:mm"),
     }));
 }
 

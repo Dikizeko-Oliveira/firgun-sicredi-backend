@@ -16,6 +16,16 @@ async function sendScoresEmails(): Promise<void> {
     "views",
     "template.hbs"
   );
+
+  const template_empty_mail = path.resolve(
+    __dirname,
+    "..",
+    "..",
+    "emails",
+    "views",
+    "template-empty.hbs"
+  );
+
   const getCompaniesService = makeGetCompaniesService();
   const updateScoreService = makeUpdateScoreService();
 
@@ -55,6 +65,25 @@ async function sendScoresEmails(): Promise<void> {
 
         const ids = extractIdsToUpdate({ array: company.Responses });
         scoresIdsToUpdate.push(...ids);
+      } else {
+        await sendEmailService.execute({
+          subject: `Resultado dos scores - ${format(new Date(), "dd/MM/yyyy")}`,
+          to: {
+            email: company.email,
+            name: company.name,
+          },
+          templateData: {
+            file: template_empty_mail,
+            variables: {
+              name: company.in_charge,
+              date: format(new Date(), "dd/MM/yyyy - HH:mm"),
+            },
+          },
+        });
+
+        console.log(
+          `Email enviado para ${company.in_charge} - ${company.name}`
+        );
       }
     }
   })();
@@ -66,7 +95,7 @@ async function sendScoresEmails(): Promise<void> {
     }
   })();
 }
-
+// 0 7 * * * => 7h todos os dias
 const job = schedule.scheduleJob("0 7 * * *", async () => {
   console.log("Iniciando envio de emails de scores às 7h...");
   await sendScoresEmails();

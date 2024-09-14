@@ -51,6 +51,7 @@ model Responses {
 model Companies {
   id         String      @id @default(uuid())
   name       String
+  image      String?
   email      String      @unique
   in_charge  String
   cellphone  String?
