@@ -12,7 +12,8 @@ import { emailsRoutes } from "./http/controllers/emails/routes";
 export const app = fastify();
 
 var allowedDomains = [
-  "http://ec2-18-230-209-108.sa-east-1.compute.amazonaws.com",
+  "https://sicredi.firgun.com.br/",
+  "https://www.sicredi.firgun.com.br/",
 ];
 
 app.register(cors, {
