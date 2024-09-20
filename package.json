@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "tsc && copyfiles -u 1 'src/**/*.{html,hbs}' dist/src/",
     "prisma": "npx prisma generate && npx prisma migrave dev",
     "start": "node -r module-alias/register dist/src/server.js"
   },
@@ -24,6 +24,7 @@
     "@types/nodemailer": "6.4.15",
     "@vitest/coverage-v8": "0.34.6",
     "@vitest/ui": "0.34.6",
+    "copyfiles": "2.4.1",
     "eslint": "8.53.0",
     "prisma": "5.19.1",
     "tsup": "7.2.0",
