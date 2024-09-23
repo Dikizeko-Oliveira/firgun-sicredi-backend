@@ -95,8 +95,8 @@ async function sendScoresEmails(): Promise<void> {
     }
   })();
 }
-// 0 7 * * * => 7h todos os dias
-const job = schedule.scheduleJob("0 7 * * *", async () => {
+// 0 7 * * * => 7h todos os dias // Mudando para 10 devido ao fuso da máquina na AWS
+const job = schedule.scheduleJob("0 10 * * *", async () => {
   console.log("Iniciando envio de emails de scores às 7h...");
   await sendScoresEmails();
   console.log("Envio de emails de score finalizado.");
