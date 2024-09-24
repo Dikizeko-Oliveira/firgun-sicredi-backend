@@ -49,9 +49,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
   // }
 
   async list() {
-    const response = await prisma.companies.findMany({
-      select: { id: true, name: true, slug: true },
-    });
+    const response = await prisma.companies.findMany();
 
     return response;
   }
