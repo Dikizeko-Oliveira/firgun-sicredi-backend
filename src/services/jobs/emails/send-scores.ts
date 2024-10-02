@@ -1,6 +1,6 @@
 import schedule from "node-schedule";
 import path from "path";
-import { format } from "date-fns";
+import { format, subHours } from "date-fns";
 
 import { makeSendEmailService } from "@/services/factories/make-send-email-service";
 import { makeGetCompaniesService } from "@/services/factories/make-get-companies-service";
@@ -76,7 +76,7 @@ async function sendScoresEmails(): Promise<void> {
             file: template_empty_mail,
             variables: {
               name: company.in_charge,
-              date: format(new Date(), "dd/MM/yyyy - HH:mm"),
+              date: format(subHours(new Date(), 3), "dd/MM/yyyy - HH:mm"),
             },
           },
         });
