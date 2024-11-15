@@ -1,4 +1,5 @@
 ALTER TABLE responses ALTER COLUMN id SET DEFAULT uuid_generate_v4();
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 pm2 start npm --name "nome da pasta" -- run start -- -p 3000
 pm2 start npm --name "nome da pasta" -- run dev -- -p 3333
