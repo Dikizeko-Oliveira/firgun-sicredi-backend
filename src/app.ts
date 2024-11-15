@@ -1,7 +1,7 @@
 import fastify from "fastify";
 import cors from "@fastify/cors";
 import { ZodError } from "zod";
-import "module-alias/register";
+// import "module-alias/register";
 
 import "./services/jobs/emails/send-scores";
 import { env } from "./env";

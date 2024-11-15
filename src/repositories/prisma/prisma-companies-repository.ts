@@ -33,7 +33,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
 
   async listAll(): Promise<CompsType[]> {
     const response = (await prisma.companies.findMany({
-      include: { Responses: true },
+      include: { Responses: true, RecipientUsers: true },
     })) as unknown as CompsType[];
 
     return response;

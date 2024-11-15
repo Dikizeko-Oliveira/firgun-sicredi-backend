@@ -40,50 +40,115 @@ async function sendScoresEmails(): Promise<void> {
         company.Responses.filter((items) => items.already_sent === false)
           .length > 0
       ) {
-        await sendEmailService.execute({
-          subject: `Resultado dos scores - ${format(new Date(), "dd/MM/yyyy")}`,
-          to: {
-            email: company.email,
-            name: company.name,
-          },
-          templateData: {
-            file: template_mail,
-            variables: {
-              name: company.in_charge,
-              date: format(new Date(), "dd/MM/yyyy - HH:mm"),
+        if (company?.email) {
+          await sendEmailService.execute({
+            subject: `Resultado dos scores - ${format(
+              new Date(),
+              "dd/MM/yyyy"
+            )}`,
+            to: {
+              email: company.email,
+              name: company.name,
             },
-          },
-          filePath: generateXlsx(
-            extractData({ array: company.Responses }),
-            "scores"
-          ),
-        });
+            templateData: {
+              file: template_mail,
+              variables: {
+                name: company.in_charge,
+                date: format(new Date(), "dd/MM/yyyy - HH:mm"),
+              },
+            },
+            filePath: generateXlsx(
+              extractData({ array: company.Responses }),
+              "scores"
+            ),
+          });
 
-        console.log(
-          `Email enviado para ${company.in_charge} - ${company.name}`
-        );
+          console.log(
+            `Email enviado para ${company.in_charge} - ${company.name}`
+          );
+        }
+        await (async () => {
+          for (const user of company.RecipientUsers) {
+            if (user?.email) {
+              await sendEmailService.execute({
+                subject: `Resultado dos scores - ${format(
+                  new Date(),
+                  "dd/MM/yyyy"
+                )}`,
+                to: {
+                  email: user.email,
+                  name: user.name,
+                },
+                templateData: {
+                  file: template_mail,
+                  variables: {
+                    name: user.name,
+                    date: format(new Date(), "dd/MM/yyyy - HH:mm"),
+                  },
+                },
+                filePath: generateXlsx(
+                  extractData({ array: company.Responses }),
+                  "scores"
+                ),
+              });
+
+              console.log(`Email enviado para ${user.name} - ${company.name}`);
+            }
+          }
+        })();
 
         const ids = extractIdsToUpdate({ array: company.Responses });
         scoresIdsToUpdate.push(...ids);
       } else {
-        await sendEmailService.execute({
-          subject: `Resultado dos scores - ${format(new Date(), "dd/MM/yyyy")}`,
-          to: {
-            email: company.email,
-            name: company.name,
-          },
-          templateData: {
-            file: template_empty_mail,
-            variables: {
-              name: company.in_charge,
-              date: format(subHours(new Date(), 3), "dd/MM/yyyy - HH:mm"),
+        if (company.email) {
+          await sendEmailService.execute({
+            subject: `Resultado dos scores - ${format(
+              new Date(),
+              "dd/MM/yyyy"
+            )}`,
+            to: {
+              email: company.email,
+              name: company.name,
             },
-          },
-        });
+            templateData: {
+              file: template_empty_mail,
+              variables: {
+                name: company.in_charge,
+                date: format(subHours(new Date(), 3), "dd/MM/yyyy - HH:mm"),
+              },
+            },
+          });
 
-        console.log(
-          `Email enviado para ${company.in_charge} - ${company.name}`
-        );
+          console.log(
+            `Email enviado para ${company.in_charge} - ${company.name}`
+          );
+        }
+
+        await (async () => {
+          for (const user of company.RecipientUsers) {
+            if (user?.email) {
+              await sendEmailService.execute({
+                subject: `Resultado dos scores - ${format(
+                  new Date(),
+                  "dd/MM/yyyy"
+                )}`,
+                to: {
+                  email: user.email,
+                  name: user.name,
+                },
+                templateData: {
+                  file: template_empty_mail,
+                  variables: {
+                    name: user.name,
+                    date: format(subHours(new Date(), 3), "dd/MM/yyyy - HH:mm"),
+                  },
+                },
+              });
+
+              console.log(`Email enviado para ${user.name} - ${company.name}`);
+            }
+          }
+        })();
       }
     }
   })();
@@ -96,7 +161,7 @@ async function sendScoresEmails(): Promise<void> {
   })();
 }
 // 0 7 * * * => 7h todos os dias // Mudando para 10 devido ao fuso da máquina na AWS
-const job = schedule.scheduleJob("0 10 * * *", async () => {
+const job = schedule.scheduleJob("7 23 * * *", async () => {
   console.log("Iniciando envio de emails de scores às 7h...");
   await sendScoresEmails();
   console.log("Envio de emails de score finalizado.");

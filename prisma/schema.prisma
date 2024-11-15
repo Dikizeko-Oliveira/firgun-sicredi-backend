@@ -48,16 +48,29 @@ model Responses {
   @@map("responses")
 }
 
+model RecipientUsers {
+  id          String     @id @default(uuid())
+  name        String
+  email       String
+  origin      String
+  origin_name String
+  created_at  DateTime   @default(now())
+  Companies   Companies? @relation(fields: [origin], references: [id])
+
+  @@map("recipient_users")
+}
+
 model Companies {
-  id         String      @id @default(uuid())
-  name       String
-  image      String?
-  email      String      @unique
-  in_charge  String
-  cellphone  String?
-  slug       String      @unique
-  created_at DateTime    @default(now())
-  Responses  Responses[]
+  id             String           @id @default(uuid())
+  name           String
+  image          String?
+  email          String           @unique
+  in_charge      String
+  cellphone      String?
+  slug           String           @unique
+  created_at     DateTime         @default(now())
+  Responses      Responses[]
+  RecipientUsers RecipientUsers[]
 
   @@map("companies")
 }

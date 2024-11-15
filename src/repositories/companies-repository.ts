@@ -18,6 +18,15 @@ interface ResponseProps {
   created_at: Date;
 }
 
+interface RecipientUserProps {
+  id: string;
+  name: string;
+  email: string;
+  origin: string;
+  origin_name: string;
+  created_at: Date;
+}
+
 export interface CompsType {
   id?: string;
   name: string;
@@ -27,6 +36,7 @@ export interface CompsType {
   slug: string;
   created_at?: Date | string;
   Responses: ResponseProps[];
+  RecipientUsers: RecipientUserProps[];
 }
 export interface CompaniesRepository {
   create(data: Prisma.CompaniesCreateInput): Promise<Companies>;
